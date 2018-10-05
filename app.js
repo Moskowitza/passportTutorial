@@ -7,8 +7,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const errorHandler = require('errorhandler');
 
-//Configure mongoose's promise to global promise
-mongoose.promise = global.Promise;
+
 
 //Configure isProduction variable
 const isProduction = process.env.NODE_ENV === 'production';
@@ -30,8 +29,14 @@ if(!isProduction) {
 
 //Configure Mongoose 
 //For our Library we'll use the same DB
-mongoose.connect('mongodb://localhost/passport-tutorial');
+var mongoDB=process.env.MONGODB_URI ||'mongodb://localhost/passport-tutorial'
+mongoose.connect(mongoDB, { useNewUrlParser: true });
+//Configure mongoose's promise to global promise
+mongoose.promise = global.Promise;
 mongoose.set('debug', true);
+
+// Require our Models AFTER configuring Mongoose
+require('./models/Users');
 
 //Error handlers & middlewares
 if(!isProduction) {
@@ -57,6 +62,5 @@ app.use((err, req, res) => {
     },
   });
 });
-
+//This is moved to our bin in the local_library example
 app.listen(8000, () => console.log('Server running on http://localhost:8000/'));
-view rawapp.js hosted with ❤ by GitHub
