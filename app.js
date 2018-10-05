@@ -36,7 +36,10 @@ mongoose.promise = global.Promise;
 mongoose.set('debug', true);
 
 // Require our Models AFTER configuring Mongoose
+//in Local_Lib we do this work in the controller
 require('./models/Users');
+require('./config/passport');
+app.use(require('./routes'));
 
 //Error handlers & middlewares
 if(!isProduction) {
